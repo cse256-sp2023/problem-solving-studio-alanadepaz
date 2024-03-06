@@ -1,8 +1,18 @@
 // ---- Define your dialogs  and panels here ----
+// ep_panel = effective permissions panel
+let result = define_new_effective_permissions("ep_panel", true, null)
+let userSelectDialog = define_new_user_select_field("user_select_dialog", "", function(selected_user) { 
+    $('#ep_panel').attr('username', 'selected_user')
 
+    // Hardcode the file path
+    $('#ep_panel').attr('filepath', '/C')
+})
 
+let newDialog = define_new_dialog("new_dialog", "", {})
 
 // ---- Display file structure ----
+$('#sidepanel').append(result)
+$('#sidepanel').append(userSelectDialog)
 
 // (recursively) makes and returns an html element (wrapped in a jquery object) for a given file object
 function make_file_element(file_obj) {
@@ -51,7 +61,25 @@ $('.folder').accordion({
     collapsible: true,
     heightStyle: 'content'
 }) // TODO: start collapsed and check whether read permission exists before expanding?
+$('.perm_info').click(function () {
+    $( "#new_dialog" ).dialog( "open" )
 
+    let username = $('#ep_panel').attr('username')
+    let filepath = $('#ep_panel').attr('filepath')
+    let permissionName = $( this ).attr('permission_name')
+
+    console.log("Username: " + username)
+    console.log("Filepath: " + filepath)
+    console.log("Permission Name: " + permissionName)
+
+    let usernameObj = all_users[username]
+    let filepathObj = path_to_file[filepath]
+
+    let explanation = allow_user_action(filepathObj, usernameObj, permissionName, true)
+    let explanationText = get_explanation_text(explanation)
+
+    $( "#new_dialog" ).text( explanationText );
+})
 
 // -- Connect File Structure lock buttons to the permission dialog --
 
