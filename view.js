@@ -2,7 +2,7 @@
 // ep_panel = effective permissions panel
 let result = define_new_effective_permissions("ep_panel", true, null)
 let userSelectDialog = define_new_user_select_field("user_select_dialog", "", function(selected_user) { 
-    $('#ep_panel').attr('username', 'selected_user')
+    $('#ep_panel').attr('username', selected_user)
 
     // Hardcode the file path
     $('#ep_panel').attr('filepath', '/C')
